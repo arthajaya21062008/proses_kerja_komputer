@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Komputer - Media Pembelajaran Interaktif</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .developer {
+            margin-top: 15px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        nav {
+            background: #f8f9fa;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .content {
+            padding: 40px;
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .process-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .process-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .process-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .process-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .process-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .detail-box {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .detail-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .example-list {
+            list-style: none;
+            padding: 15px;
+        }
+
+        .example-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #764ba2;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .question {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .question.active {
+            display: block;
+        }
+
+        .question h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .option.correct {
+            border-color: #28a745;
+            background: #28a745;
+            color: white;
+        }
+
+        .option.wrong {
+            border-color: #dc3545;
+            background: #dc3545;
+            color: white;
+        }
+
+        .quiz-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .score {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .interactive-demo {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .demo-input {
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            width: 300px;
+            max-width: 100%;
+            margin: 10px;
+        }
+
+        .demo-output {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            min-height: 60px;
+            border: 2px dashed #667eea;
+        }
+
+        footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🖥️ Sistem Komputer</h1>
+            <p>Media Pembelajaran Interaktif - Proses Kerja Komputer</p>
+            <div class="developer">Dikembangkan oleh: I Gede Artha Jaya</div>
+        </header>
+
+        <nav>
+            <button class="nav-btn active" onclick="showContent('home')">Beranda</button>
+            <button class="nav-btn" onclick="showContent('materi')">Materi</button>
+            <button class="nav-btn" onclick="showContent('contoh')">Contoh</button>
+            <button class="nav-btn" onclick="showContent('interaktif')">Demo Interaktif</button>
+            <button class="nav-btn" onclick="showContent('quiz')">Quiz</button>
+        </nav>
+
+        <div id="home" class="content active">
+            <h2 class="section-title">Selamat Datang!</h2>
+            <p style="font-size: 1.1em; line-height: 1.8; margin: 20px 0;">
+                Media pembelajaran ini akan membantu Anda memahami cara kerja komputer melalui 4 komponen utama:
+                <strong>Input, Process, Output, dan Storage</strong>.
+            </p>
+            
+            <div class="process-container">
+                <div class="process-card">
+                    <div class="process-icon">⌨️</div>
+                    <h3>INPUT</h3>
+                    <p>Memasukkan data ke komputer</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-icon">⚙️</div>
+                    <h3>PROCESS</h3>
+                    <p>Mengolah data menjadi informasi</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-icon">🖥️</div>
+                    <h3>OUTPUT</h3>
+                    <p>Menampilkan hasil pemrosesan</p>
+                </div>
+                <div class="process-card">
+                    <div class="process-icon">💾</div>
+                    <h3>STORAGE</h3>
+                    <p>Menyimpan data dan informasi</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="materi" class="content">
+            <h2 class="section-title">Materi Pembelajaran</h2>
+            
+            <div class="detail-box">
+                <h4>📥 1. INPUT (Masukan)</h4>
+                <p><strong>Definisi:</strong> Input adalah proses memasukkan data atau instruksi ke dalam sistem komputer melalui perangkat input.</p>
+                <p><strong>Fungsi:</strong> Memberikan data mentah kepada komputer untuk diproses.</p>
+                <p><strong>Perangkat Input:</strong> Keyboard, Mouse, Scanner, Microphone, Webcam, Touchscreen, Joystick</p>
+            </div>
+
+            <div class="detail-box">
+                <h4>⚙️ 2. PROCESS (Pemrosesan)</h4>
+                <p><strong>Definisi:</strong> Process adalah tahap pengolahan data yang dilakukan oleh CPU (Central Processing Unit).</p>
+                <p><strong>Fungsi:</strong> Mengubah data mentah menjadi informasi yang bermakna melalui operasi aritmatika dan logika.</p>
+                <p><strong>Komponen Utama:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>CPU (Processor) - Otak komputer</li>
+                    <li>ALU (Arithmetic Logic Unit) - Melakukan operasi matematika</li>
+                    <li>Control Unit - Mengatur aliran data</li>
+                    <li>RAM (Random Access Memory) - Penyimpanan sementara</li>
+                </ul>
+            </div>
+
+            <div class="detail-box">
+                <h4>📤 3. OUTPUT (Keluaran)</h4>
+                <p><strong>Definisi:</strong> Output adalah hasil pemrosesan data yang ditampilkan dalam bentuk yang dapat dipahami manusia.</p>
+                <p><strong>Fungsi:</strong> Menampilkan informasi hasil pemrosesan kepada pengguna.</p>
+                <p><strong>Perangkat Output:</strong> Monitor, Printer, Speaker, Proyektor, Headphone, Plotter</p>
+            </div>
+
+            <div class="detail-box">
+                <h4>💾 4. STORAGE (Penyimpanan)</h4>
+                <p><strong>Definisi:</strong> Storage adalah media untuk menyimpan data dan informasi secara permanen atau sementara.</p>
+                <p><strong>Fungsi:</strong> Menyimpan data, program, dan sistem operasi untuk penggunaan jangka panjang.</p>
+                <p><strong>Jenis Storage:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Primary Storage: RAM, ROM, Cache</li>
+                    <li>Secondary Storage: Hard Disk, SSD, Flash Drive</li>
+                    <li>Tertiary Storage: Cloud Storage, Tape Backup</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="contoh" class="content">
+            <h2 class="section-title">Contoh Penerapan</h2>
+            
+            <div class="detail-box">
+                <h4>🎮 Contoh 1: Bermain Game</h4>
+                <ul class="example-list">
+                    <li><strong>INPUT:</strong> Menekan tombol keyboard/controller untuk menggerakkan karakter</li>
+                    <li><strong>PROCESS:</strong> CPU memproses perintah, menghitung posisi karakter, grafik, dan fisika game</li>
+                    <li><strong>OUTPUT:</strong> Monitor menampilkan pergerakan karakter, speaker mengeluarkan suara</li>
+                    <li><strong>STORAGE:</strong> Save game disimpan di hard disk/SSD</li>
+                </ul>
+            </div>
+
+            <div class="detail-box">
+                <h4>📝 Contoh 2: Menulis Dokumen</h4>
+                <ul class="example-list">
+                    <li><strong>INPUT:</strong> Mengetik teks menggunakan keyboard</li>
+                    <li><strong>PROCESS:</strong> Aplikasi pengolah kata memproses teks, format, dan layout</li>
+                    <li><strong>OUTPUT:</strong> Teks ditampilkan di layar monitor</li>
+                    <li><strong>STORAGE:</strong> Dokumen disimpan di hard disk sebagai file .docx atau .pdf</li>
+                </ul>
+            </div>
+
+            <div class="detail-box">
+                <h4>🎵 Contoh 3: Mendengarkan Musik</h4>
+                <ul class="example-list">
+                    <li><strong>INPUT:</strong> Mengklik tombol play pada aplikasi musik</li>
+                    <li><strong>PROCESS:</strong> CPU membaca file audio, decode format MP3/FLAC</li>
+                    <li><strong>OUTPUT:</strong> Speaker/headphone mengeluarkan suara musik</li>
+                    <li><strong>STORAGE:</strong> File musik tersimpan di hard disk atau streaming dari cloud</li>
+                </ul>
+            </div>
+
+            <div class="detail-box">
+                <h4>🖨️ Contoh 4: Mencetak Dokumen</h4>
+                <ul class="example-list">
+                    <li><strong>INPUT:</strong> Memberikan perintah print melalui mouse/keyboard</li>
+                    <li><strong>PROCESS:</strong> CPU mengolah data dokumen menjadi format yang dapat dicetak</li>
+                    <li><strong>OUTPUT:</strong> Printer mencetak dokumen di kertas</li>
+                    <li><strong>STORAGE:</strong> Dokumen asli tetap tersimpan di komputer</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="interaktif" class="content">
+            <h2 class="section-title">Demo Interaktif</h2>
+            <p style="text-align: center; margin-bottom: 20px; font-size: 1.1em;">
+                Coba simulasi sederhana proses Input → Process → Output!
+            </p>
+
+            <div class="interactive-demo">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Kalkulator Sederhana</h3>
+                <div>
+                    <input type="number" id="num1" class="demo-input" placeholder="Masukkan angka 1">
+                    <select id="operator" class="demo-input">
+                        <option value="+">+</option>
+                        <option value="-">-</option>
+                        <option value="*">×</option>
+                        <option value="/">÷</option>
+                    </select>
+                    <input type="number" id="num2" class="demo-input" placeholder="Masukkan angka 2">
+                </div>
+                <button class="btn" onclick="calculate()" style="margin-top: 20px;">Hitung (Process)</button>
+                
+                <div class="demo-output" id="result">
+                    <p style="color: #999;">Hasil akan muncul di sini...</p>
+                </div>
+
+                <div style="margin-top: 30px; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    <p><strong>🔍 Penjelasan Proses:</strong></p>
+                    <ul style="list-style: none; padding: 10px;">
+                        <li>✅ <strong>INPUT:</strong> Anda memasukkan 2 angka dan operator</li>
+                        <li>✅ <strong>PROCESS:</strong> JavaScript memproses perhitungan</li>
+                        <li>✅ <strong>OUTPUT:</strong> Hasil ditampilkan di kotak output</li>
+                        <li>✅ <strong>STORAGE:</strong> Data tersimpan sementara di RAM browser</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="quiz" class="content">
+            <h2 class="section-title">Quiz Interaktif</h2>
+            <p style="text-align: center; margin-bottom: 30px; font-size: 1.1em;">
+                Uji pemahaman Anda tentang Sistem Komputer!
+            </p>
+
+            <div class="quiz-container">
+                <div id="quiz-questions">
+                    <div class="question active" data-question="1">
+                        <h3>Pertanyaan 1 dari 5</h3>
+                        <p style="font-size: 1.1em; margin: 15px 0;">Perangkat berikut yang termasuk kategori INPUT adalah...</p>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this, false)">Monitor</div>
+                            <div class="option" onclick="selectOption(this, true)">Keyboard</div>
+                            <div class="option" onclick="selectOption(this, false)">Speaker</div>
+                            <div class="option" onclick="selectOption(this, false)">Printer</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="2">
+                        <h3>Pertanyaan 2 dari 5</h3>
+                        <p style="font-size: 1.1em; margin: 15px 0;">Komponen yang berfungsi sebagai "otak" komputer adalah...</p>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this, false)">RAM</div>
+                            <div class="option" onclick="selectOption(this, true)">CPU</div>
+                            <div class="option" onclick="selectOption(this, false)">Hard Disk</div>
+                            <div class="option" onclick="selectOption(this, false)">Motherboard</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="3">
+                        <h3>Pertanyaan 3 dari 5</h3>
+                        <p style="font-size: 1.1em; margin: 15px 0;">SSD (Solid State Drive) termasuk dalam kategori...</p>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this, false)">Input Device</div>
+                            <div class="option" onclick="selectOption(this, false)">Output Device</div>
+                            <div class="option" onclick="selectOption(this, true)">Storage Device</div>
+                            <div class="option" onclick="selectOption(this, false)">Processing Device</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="4">
+                        <h3>Pertanyaan 4 dari 5</h3>
+                        <p style="font-size: 1.1em; margin: 15px 0;">Urutan yang benar dalam siklus kerja komputer adalah...</p>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this, false)">Process → Input → Output → Storage</div>
+                            <div class="option" onclick="selectOption(this, true)">Input → Process → Output → Storage</div>
+                            <div class="option" onclick="selectOption(this, false)">Storage → Input → Process → Output</div>
+                            <div class="option" onclick="selectOption(this, false)">Output → Process → Input → Storage</div>
+                        </div>
+                    </div>
+
+                    <div class="question" data-question="5">
+                        <h3>Pertanyaan 5 dari 5</h3>
+                        <p style="font-size: 1.1em; margin: 15px 0;">Ketika kamu mengetik di Microsoft Word, lalu menyimpannya. Proses menyimpan tersebut termasuk tahap...</p>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this, false)">Input</div>
+                            <div class="option" onclick="selectOption(this, false)">Process</div>
+                            <div class="option" onclick="selectOption(this, false)">Output</div>
+                            <div class="option" onclick="selectOption(this, true)">Storage</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quiz-nav">
+                    <button class="btn" id="prevBtn" onclick="previousQuestion()" disabled>← Sebelumnya</button>
+                    <button class="btn" id="nextBtn" onclick="nextQuestion()">Selanjutnya →</button>
+                    <button class="btn" id="submitBtn" onclick="submitQuiz()" style="display: none;">Selesai ✓</button>
+                </div>
+
+                <div class="result" id="quizResult">
+                    <h2>🎉 Quiz Selesai!</h2>
+                    <div class="score" id="finalScore">0/5</div>
+                    <p style="font-size: 1.2em;" id="resultMessage"></p>
+                    <button class="btn" onclick="resetQuiz()" style="margin-top: 20px;">Ulangi Quiz</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 Media Pembelajaran Sistem Komputer</p>
+            <p>Dikembangkan oleh: <strong>I Gede Artha Jaya</strong></p>
+        </footer>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        let score = 0;
+        let answers = {};
+
+        function showContent(contentId) {
+            document.querySelectorAll('.content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(contentId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function calculate() {
+            const num1 = parseFloat(document.getElementById('num1').value);
+            const num2 = parseFloat(document.getElementById('num2').value);
+            const operator = document.getElementById('operator').value;
+            const resultDiv = document.getElementById('result');
+
+            if (isNaN(num1) || isNaN(num2)) {
+                resultDiv.innerHTML = '<p style="color: #dc3545;">❌ Mohon masukkan angka yang valid!</p>';
+                return;
+            }
+
+            let result;
+            switch(operator) {
+                case '+':
+                    result = num1 + num2;
+                    break;
+                case '-':
+                    result = num1 - num2;
+                    break;
+                case '*':
+                    result = num1 * num2;
+                    break;
+                case '/':
+                    if (num2 === 0) {
+                        resultDiv.innerHTML = '<p style="color: #dc3545;">❌ Tidak bisa membagi dengan 0!</p>';
+                        return;
+                    }
+                    result = num1 / num2;
+                    break;
+            }
+
+            resultDiv.innerHTML = `
+                <p style="color: #667eea; font-size: 1.2em; margin-bottom: 10px;">
+                    <strong>OUTPUT (Hasil):</strong>
+                </p>
+                <p style="font-size: 2em; color: #28a745; font-weight: bold;">
+                    ${num1} ${operator} ${num2} = ${result}
+                </p>
+            `;
+        }
+
+        function selectOption(element, isCorrect) {
+            const options = element.parentElement.children;
+            for (let option of options) {
+                option.onclick = null;
+                if (option === element) {
+                    if (isCorrect) {
+                        option.classList.add('correct');
+                        answers[currentQuestion] = true;
+                    } else {
+                        option.classList.add('wrong');
+                        answers[currentQuestion] = false;
+                    }
+                } else {
+                    option.style.opacity = '0.5';
+                }
+            }
+
+            setTimeout(() => {
+                if (currentQuestion < 5) {
+                    nextQuestion();
+                } else {
+                    document.getElementById('nextBtn').style.display = 'none';
+                    document.getElementById('submitBtn').style.display = 'block';
+                }
+            }, 1000);
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < 5) {
+                document.querySelector(`[data-question="${currentQuestion}"]`).classList.remove('active');
+                currentQuestion++;
+                document.querySelector(`[data-question="${currentQuestion}"]`).classList.add('active');
+                updateButtons();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 1) {
+                document.querySelector(`[data-question="${currentQuestion}"]`).classList.remove('active');
+                currentQuestion--;
+                document.querySelector(`[data-question="${currentQuestion}"]`).classList.add('active');
+                updateButtons();
+            }
+        }
+
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 1;
+            if (currentQuestion === 5) {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('submitBtn').style.display = 'block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('submitBtn').style.display = 'none';
+            }
+        }
+
+        function submitQuiz() {
+            score = Object.values(answers).filter(answer => answer === true).length;
+            document.getElementById('finalScore').textContent = `${score}/5`;
+            
+            let message = '';
+            if (score === 5) {
+                message = '🏆 Sempurna! Anda sangat memahami materi!';
+            } else if (score >= 3) {
+                message = '👍 Bagus! Terus tingkatkan pemahaman Anda!';
+            } else {
+                message = '📚 Ayo belajar lagi! Baca materinya sekali lagi.';
+            }
+            
+            document.getElementById('resultMessage').textContent = message;
+            document.getElementById('quiz-questions').style.display = 'none';
+            document.querySelector('.quiz-nav').style.display = 'none';
+            document.getElementById('quizResult').classList.add('show');
+        }
+
+        function resetQuiz() {
+            currentQuestion = 1;
+            score = 0;
+            answers = {};
+            
+            document.querySelectorAll('.question').forEach(q => {
+                q.classList.remove('active');
+                const options = q.querySelectorAll('.option');
+                options.forEach(opt => {
+                    opt.classList.remove('correct', 'wrong', 'selected');
+                    opt.style.opacity = '1';
+                    opt.onclick = function() {
+                        selectOption(this, this.dataset.correct === 'true');
+                    };
+                });
+            });
+            
+            document.querySelector('[data-question="1"]').classList.add('active');
+            document.getElementById('quiz-questions').style.display = 'block';
+            document.querySelector('.quiz-nav').style.display = 'flex';
+            document.getElementById('quizResult').classList.remove('show');
+            document.getElementById('nextBtn').style.display = 'block';
+            document.getElementById('submitBtn').style.display = 'none';
+            updateButtons();
+        }
+    </script>
+</body>
+</html>
